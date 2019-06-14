@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.coderslab.entity.Comment;
 import pl.coderslab.entity.Tweet;
 import pl.coderslab.entity.User;
@@ -17,9 +19,13 @@ import pl.coderslab.service.TweetService;
 
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Controller
+@Validated
 public class MainPageController {
 
     private final TweetRepository tweetRepository;
@@ -36,7 +42,7 @@ public class MainPageController {
     }
 
     @GetMapping("/main-page")
-    public String mainPage(@SessionAttribute(required = false) User user, Model model){
+    public String mainPage(@SessionAttribute(required = false, name="sessionuser") User user, Model model){
         if(user==null){
             return "redirect:/";
         }
@@ -56,7 +62,7 @@ public class MainPageController {
     }*/
 
     @PostMapping("/main-page")
-    public String mainPageProcessing(@SessionAttribute(required = false) User user
+    public String mainPageProcessing(@SessionAttribute(required = false, name="sessionuser") User user
                                         , @Valid Tweet tweet, BindingResult bindingResult){
         if(!bindingResult.hasErrors()) {
             tweetService.saveTweet(tweet);
@@ -95,9 +101,15 @@ public class MainPageController {
     }
 
     @PostMapping("/add-comment")
-    public String addComment(@RequestParam Long id, @RequestParam String text
-                    , @RequestParam Long user){
-        commentService.bindComment(id, text, user);
+
+    public String addComment(@RequestParam Long id, /*@Size(min=1, max = 30, message = "should be between 1 and 30")*/ @RequestParam /*@Max(30) @Min(1)*/ String text
+                    , @RequestParam Long user, RedirectAttributes attributes){
+        System.out.println(text.length());
+        String result = commentService.bindComment(id, text, user);
+        if (result!=null){
+            attributes.addFlashAttribute("comment", result );
+            System.out.println(result);
+        }
         return "redirect:main-page";
 
     }

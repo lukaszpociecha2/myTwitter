@@ -29,21 +29,21 @@ public class LoginController {
     @GetMapping("/")
     public String login(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        if(session.getAttribute("user")==null){
+        if (session.getAttribute("user") == null) {
             return "home";
         } else {
-            return "main-page";
+            return "redirect:/main-page";
         }
 
     }
 
     @PostMapping("/")
     public String loginProcessing(@RequestParam String email, @RequestParam String password, Model model
-                                    , HttpServletRequest request) {
+            , HttpServletRequest request) {
         User user = userService.verify(email, password);
-        if (user!=null) {
+        if (user != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("user", user);
+            session.setAttribute("sessionuser", user);
             return "redirect:/main-page";
         } else {
             model.addAttribute("error", "true");
@@ -51,29 +51,34 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/signup")
+    @GetMapping("/create")
     public String signup(Model model) {
         User user = new User();
         model.addAttribute(user);
         return "signup";
     }
 
-    @PostMapping("/signup")
-    public String signupProceessing(@Valid User user, BindingResult bindingResult) {
+    @PostMapping("/create")
+    public String signupProceessing(@Valid User user, BindingResult bindingResult, Model model) {
         if (!bindingResult.hasErrors()) {
-            userService.saveUser(user);
-            return "redirect:/"; //TODO przekierowanie na login
+            boolean success = userService.saveUser(user);
+            if (success) {
+                return "redirect:/";
+            } else {
+                model.addAttribute("notunique", true);
+                return "signup";
+            }
         } else {
-            return "signup";
+                return "signup";
+            }
         }
+
+        @GetMapping("/logout")
+        public String logout (HttpServletRequest request){
+            HttpSession session = request.getSession();
+            session.invalidate();
+            return "redirect:/";
+        }
+
+
     }
-
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        session.invalidate();
-        return "redirect:/";
-    }
-
-
-}

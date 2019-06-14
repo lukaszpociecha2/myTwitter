@@ -21,11 +21,16 @@
             Enter last name: <f:input path="lastName"/><f:errors path="lastName"/>
             <p></p>
             Enter email: <f:input path="email"></f:input><f:errors path="email"/>
+            <p>
+                <c:if test="${notunique==true}">email already exists</c:if>
+            </p>
+            Enter password: <f:password id="password" path="password"></f:password><f:errors path="password"/>
             <p></p>
-            Enter password: <f:password path="password"></f:password><f:errors path="password"/>
-            <p></p>
-            <input type="submit" value="Log in">
+            Repeat password <input id="repeat_password" type="password">
+            <input type="submit" value="Log in" id="submit_btn">
         </f:form>
     </div>
+
+<script type="application/javascript" src="../../resources/create_user.js"></script>
 </body>
 </html>

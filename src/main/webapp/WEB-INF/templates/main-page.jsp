@@ -5,6 +5,7 @@
   Time: 12:34
   To change this template use File | Settings | File Templates.
 --%>
+<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
@@ -14,14 +15,14 @@
     <link href="<c:url value="/resources/style.css"/>" rel="stylesheet" type="text/css">
 </head>
 <body>
-<c:out value="Witaj ${sessionScope.user.firstName}"/>
+<c:out value="Witaj ${sessionScope.sessionuser.firstName}"/>
 <p>
     <button><a href="/logout">Logout</a></button>
 </p>
 
 <f:form method="post" modelAttribute="tweet">
     <f:textarea path="text" maxlength="140"/>
-    <f:hidden path="user.id" value="${sessionScope.user.id}"></f:hidden>
+    <f:hidden path="user.id" value="${sessionScope.sessionuser.id}"></f:hidden>
     <input type="submit" value="TWEET!!!"/>
 
 </f:form>
@@ -35,7 +36,8 @@
     <c:forEach items="${alltweets}" var="tweet">
         <table id="wall">
             <tr>
-                <td><c:out value="${tweet.user.firstName}"></c:out></td>
+                <td><a href="<c:out value="/send/${tweet.user.id}"/>" data-recepient="<c:out value="${tweet.user.id}"/>"class="message_btn"> <c:out value="${tweet.user.firstName}"></c:out></a></td>
+
                 <td style="font-style: italic"><c:out value="${tweet.text}"></c:out></td>
                 <td style="font-size: 12px"><c:out value="${tweet.created}"></c:out></td>
             </tr>
@@ -48,11 +50,12 @@
         </c:forEach>
 
         <form method="post" action="/add-comment">
-            <input textarea maxlength="60" name="text"/>
+            <input class="tweet_text" textarea <%--maxlength="60"--%> name="text"/>
             <input type="hidden" name="id" value="${tweet.id}"/>
-            <input type="hidden" name="user" value="${sessionScope.user.id}"/>
+            <input type="hidden" name="user" value="${sessionScope.sessionuser.id}"/>
             <input type="submit" value="Comment now"/>
         </form>
+        <c:if test="${not empty comment}"><script type="application/javascript">alert('${comment}')</script></c:if>
 
     </c:forEach>
 
@@ -60,6 +63,6 @@
 
 
 </c:if>
-
+<%--<script type="application/javascript" src="../../resources/script.js"></script>--%>
 </body>
 </html>

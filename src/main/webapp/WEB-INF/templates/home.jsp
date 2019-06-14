@@ -27,7 +27,7 @@
             <script type="application/javascript" >alert('Wrong')</script>
         </c:if>
     </form>
-    <button><a href="/signup">signup</a></button>
+    <button><a href="/create">signup</a></button>
 </div>
 </body>
 </html>

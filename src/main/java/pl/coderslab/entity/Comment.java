@@ -22,7 +22,7 @@ public class Comment {
 
     private LocalDateTime created;
 
-    //@Size(max = 60)
+    @Size(min=1, max = 30, message = "musi być dłuższa niż 0 znakow i nie dłuższa niż 30")
     private String text;
 
     public Long getId() {
