@@ -11,10 +11,10 @@ public class Message {
 
     private String text;
 
-    @OneToOne
+    @ManyToOne
     private User author;
 
-    @OneToOne
+    @ManyToOne
     private User recepient;
 
     public String getText() {

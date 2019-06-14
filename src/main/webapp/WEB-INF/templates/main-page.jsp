@@ -21,25 +21,24 @@
 </p>
 
 <f:form method="post" modelAttribute="tweet">
-    <f:textarea path="text" maxlength="140"/>
+    <f:textarea path="text"/><%--maxlength="140"--%><f:errors path="text"/>
     <f:hidden path="user.id" value="${sessionScope.sessionuser.id}"></f:hidden>
     <input type="submit" value="TWEET!!!"/>
 
 </f:form>
-
 
 <c:if test="${empty alltweets}">
     Empty list
 </c:if>
 <c:if test="${not empty alltweets}">
 
-    <c:forEach items="${alltweets}" var="tweet">
+    <c:forEach items="${alltweets}" var="wall_tweet">
         <table id="wall">
             <tr>
-                <td><a href="<c:out value="/send/${tweet.user.id}"/>" data-recepient="<c:out value="${tweet.user.id}"/>"class="message_btn"> <c:out value="${tweet.user.firstName}"></c:out></a></td>
+                <td><a href="<c:out value="/send/${wall_tweet.user.id}"/>" data-recepient="<c:out value="${tweet.user.id}"/>"class="message_btn"> <c:out value="${wall_tweet.user.firstName}"></c:out></a></td>
 
-                <td style="font-style: italic"><c:out value="${tweet.text}"></c:out></td>
-                <td style="font-size: 12px"><c:out value="${tweet.created}"></c:out></td>
+                <td style="font-style: italic"><c:out value="${wall_tweet.text}"></c:out></td>
+                <td style="font-size: 12px"><c:out value="${wall_tweet.created}"></c:out></td>
             </tr>
         </table>
         <c:forEach items="${tweet.commentList}" var="comment">

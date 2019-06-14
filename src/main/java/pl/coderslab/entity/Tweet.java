@@ -2,6 +2,7 @@ package pl.coderslab.entity;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -20,7 +21,7 @@ public class Tweet {
     @ManyToOne
     private User user;
 
-    @Size(max = 140)
+    @Length(max = 140)
     private String text;
 
     private LocalDateTime created;

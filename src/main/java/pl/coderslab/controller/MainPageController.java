@@ -6,7 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
+
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.coderslab.entity.Comment;
@@ -25,7 +26,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Controller
-@Validated
+
 public class MainPageController {
 
     private final TweetRepository tweetRepository;
@@ -63,16 +64,17 @@ public class MainPageController {
 
     @PostMapping("/main-page")
     public String mainPageProcessing(@SessionAttribute(required = false, name="sessionuser") User user
-                                        , @Valid Tweet tweet, BindingResult bindingResult){
-        if(!bindingResult.hasErrors()) {
-            tweetService.saveTweet(tweet);
-        } else {
-            List<ObjectError> errors =bindingResult.getAllErrors();
-            for (ObjectError error : errors) {
-                System.out.println(error.getObjectName() + error.getCode());
-            }
-        }
+                                        , @Valid Tweet tweet, BindingResult bindingResult, Model model) {
 
+        if (!bindingResult.hasErrors()) {
+            tweetService.saveTweet(tweet);
+            return "redirect:/main-page";
+        } else {
+            List<Tweet> tweetList = tweetRepository.findAll();
+            model.addAttribute("alltweets", tweetList);
+            return "main-page";
+        }
+    }
 
       /*  System.out.println("Autor komentarza: " + comment.getUser().getId());
         System.out.println("Tekst komentarza: " + comment.getText());
@@ -80,8 +82,8 @@ public class MainPageController {
 
         /*List<Tweet> tweetList = tweetRepository.findAll();*/
 
-        return "redirect:/main-page";
-    }
+
+
 
     @GetMapping("find-by-user/{id}")
     @ResponseBody

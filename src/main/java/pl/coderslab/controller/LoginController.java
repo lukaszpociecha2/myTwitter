@@ -12,6 +12,7 @@ import pl.coderslab.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Enumeration;
 
 @Controller
 public class LoginController {
@@ -28,10 +29,15 @@ public class LoginController {
 
     @GetMapping("/")
     public String login(HttpServletRequest request) {
+        System.err.println("W get /");
+
         HttpSession session = request.getSession();
-        if (session.getAttribute("user") == null) {
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
             return "home";
         } else {
+
             return "redirect:/main-page";
         }
 
@@ -40,12 +46,19 @@ public class LoginController {
     @PostMapping("/")
     public String loginProcessing(@RequestParam String email, @RequestParam String password, Model model
             , HttpServletRequest request) {
+
+        if (password.isEmpty() || email.isEmpty()) {
+            model.addAttribute("error", "true");
+            return "home";
+        }
+
         User user = userService.verify(email, password);
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("sessionuser", user);
             return "redirect:/main-page";
         } else {
+
             model.addAttribute("error", "true");
             return "home";
         }
@@ -69,16 +82,16 @@ public class LoginController {
                 return "signup";
             }
         } else {
-                return "signup";
-            }
+            return "signup";
         }
-
-        @GetMapping("/logout")
-        public String logout (HttpServletRequest request){
-            HttpSession session = request.getSession();
-            session.invalidate();
-            return "redirect:/";
-        }
-
-
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return "redirect:/";
+    }
+
+
+}

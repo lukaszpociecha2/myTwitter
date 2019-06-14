@@ -7,7 +7,6 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,20 +17,19 @@ public class User {
     private Long id;
 
     @NotBlank
-    @NotNull
+
     private String firstName;
 
     @NotBlank
-    @NotNull
+
     private String lastName;
 
     @NotBlank
-    @NotNull
+
     @JsonIgnore
     private String password;
 
     @NotBlank
-    @NotNull
     @Email
     private String email;
 
