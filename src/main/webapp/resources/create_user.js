@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
         })
 
         document.querySelector("#submit_btn").addEventListener("click", function (evt) {
-
-            if(passwordValue!==repeatPasswordValue){
+            console.log(repeatPasswordValue);
+            if(repeatPasswordValue===undefined || passwordValue!==repeatPasswordValue){
                 evt.preventDefault();
                 alert('Passwords dont match');
             }

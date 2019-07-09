@@ -29,6 +29,7 @@ public class AppConfig implements WebMvcConfigurer {
 
 
     //hibernate
+
     @Bean
     public LocalEntityManagerFactoryBean entityManagerFactory() {
         LocalEntityManagerFactoryBean emfb = new LocalEntityManagerFactoryBean();
@@ -45,8 +46,8 @@ public class AppConfig implements WebMvcConfigurer {
     //converter
 
 
-
     //MVC
+
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver =
@@ -58,17 +59,22 @@ public class AppConfig implements WebMvcConfigurer {
 
     // resource
 
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**")
                 .addResourceLocations("/resources/");
     }
 
+
+    // security
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
+    // validation
 
     @Bean
     public MethodValidationPostProcessor methodValidationPostProcessor() {

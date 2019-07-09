@@ -11,6 +11,8 @@ public class Message {
 
     private String text;
 
+    private boolean seen;
+
     @ManyToOne
     private User author;
 
@@ -39,5 +41,21 @@ public class Message {
 
     public void setRecepient(User recepient) {
         this.recepient = recepient;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
     }
 }

@@ -1,6 +1,7 @@
 package pl.coderslab.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -22,7 +23,7 @@ public class Comment {
 
     private LocalDateTime created;
 
-    @Size(min=1, max = 30, message = "musi być dłuższa niż 0 znakow i nie dłuższa niż 30")
+    @Length(min=1, max = 60, message = "musi być dłuższa niż 0 znakow i nie dłuższa niż 30")
     private String text;
 
     public Long getId() {

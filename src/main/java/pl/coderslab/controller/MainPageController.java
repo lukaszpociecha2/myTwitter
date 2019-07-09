@@ -26,7 +26,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Controller
-
+@RequestMapping("/")
 public class MainPageController {
 
     private final TweetRepository tweetRepository;
@@ -42,10 +42,10 @@ public class MainPageController {
         this.commentRepository = commentRepository;
     }
 
-    @GetMapping("/main-page")
-    public String mainPage(@SessionAttribute(required = false, name="sessionuser") User user, Model model){
-        if(user==null){
-            return "redirect:/";
+    @GetMapping()
+    public String mainPage(@SessionAttribute(required = false, name = "sessionuser") User user, Model model) {
+        if (user == null) {
+            return "redirect:/signin";
         }
         List<Tweet> tweetList = tweetRepository.findAll();
         model.addAttribute("alltweets", tweetList);
@@ -54,21 +54,14 @@ public class MainPageController {
         return "main-page";
     }
 
-  /*  @GetMapping("get-all-tweets")
 
-    public String getAllTweets(HttpServletRequest request, Model model){
-        List<Tweet> tweetList = tweetRepository.findAll();
-        model.addAttribute("alltweets", tweetList);
-        return "all-tweets";
-    }*/
-
-    @PostMapping("/main-page")
-    public String mainPageProcessing(@SessionAttribute(required = false, name="sessionuser") User user
-                                        , @Valid Tweet tweet, BindingResult bindingResult, Model model) {
+    @PostMapping()
+    public String mainPageProcessing(@SessionAttribute(required = false, name = "sessionuser") User user
+            , @Valid Tweet tweet, BindingResult bindingResult, Model model) {
 
         if (!bindingResult.hasErrors()) {
             tweetService.saveTweet(tweet);
-            return "redirect:/main-page";
+            return "redirect:/";
         } else {
             List<Tweet> tweetList = tweetRepository.findAll();
             model.addAttribute("alltweets", tweetList);
@@ -76,20 +69,13 @@ public class MainPageController {
         }
     }
 
-      /*  System.out.println("Autor komentarza: " + comment.getUser().getId());
-        System.out.println("Tekst komentarza: " + comment.getText());
-        System.out.println("Comment do tweeta: " + comment.getTweet().getId());*/
-
-        /*List<Tweet> tweetList = tweetRepository.findAll();*/
-
-
 
 
     @GetMapping("find-by-user/{id}")
     @ResponseBody
-    public List<Tweet> findAllUserTweets(@PathVariable Long id, Model mode){
+    public List<Tweet> findAllUserTweets(@PathVariable Long id, Model mode) {
         List<Tweet> list = tweetRepository.findAllByUserId(id);
-        if(!list.isEmpty()){
+        if (!list.isEmpty()) {
             list.get(0).getCommentList();
         }
         return list;
@@ -98,21 +84,21 @@ public class MainPageController {
 
     @GetMapping("/get-all-tweets")
     @ResponseBody
-    public List<Tweet> allComments(){
+    public List<Tweet> allComments() {
         return tweetRepository.findAll();
     }
 
     @PostMapping("/add-comment")
 
     public String addComment(@RequestParam Long id, /*@Size(min=1, max = 30, message = "should be between 1 and 30")*/ @RequestParam /*@Max(30) @Min(1)*/ String text
-                    , @RequestParam Long user, RedirectAttributes attributes){
+            , @RequestParam Long user, RedirectAttributes attributes) {
         System.out.println(text.length());
         String result = commentService.bindComment(id, text, user);
-        if (result!=null){
-            attributes.addFlashAttribute("comment", result );
+        if (result != null) {
+            attributes.addFlashAttribute("comment", result);
             System.out.println(result);
         }
-        return "redirect:main-page";
+        return "redirect:/";
 
     }
 

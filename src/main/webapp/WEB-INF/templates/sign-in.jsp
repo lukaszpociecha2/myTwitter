@@ -17,17 +17,17 @@
 <body>
 <div id="login">
 
-    <form method="post" action="/">
+    <form method="post" >
         Enter login/email: <input type="text" name="email"/>
         <p></p>
         Enter password: <input type="password" name="password"/>
         <p></p>
         <input type="submit" value="Log in">
         <c:if test="${error=='true'}">Wrong login!
-            <script type="application/javascript" >alert('Wrong')</script>
+            <script type="application/javascript" >alert('Wrong email or password')</script>
         </c:if>
     </form>
-    <button><a href="/create">signup</a></button>
+    <button><a href="/signup">signup</a></button>
 </div>
 </body>
 </html>

@@ -30,7 +30,7 @@ public class CommentService {
         this.validator = validator;
     }
 
-    public String bindComment(Long id, String text, Long user){
+    public String bindComment(Long id, String text, Long user) {
 
         Comment comment = new Comment();
         Tweet tweet = tweetRepository.findOne(id);
@@ -41,7 +41,7 @@ public class CommentService {
 
         //TODO validate
         Set<ConstraintViolation<Comment>> violations = validator.validate(comment);
-        if(violations.isEmpty()) {
+        if (violations.isEmpty()) {
             commentRepository.save(comment);
             return null;
         } else {

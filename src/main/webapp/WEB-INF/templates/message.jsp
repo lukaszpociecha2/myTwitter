@@ -15,7 +15,7 @@
 <body>
 <%--servletRelativeAction="/send-message"--%>
 <c:out value="recepeitn id: ${recepient}"/>
-<form action="/send" method="post">
+<form action="/messages/send" method="post">
     <input type="text" name="text">
     <input type="hidden" name="recepientId" value="<c:out value="${recepient}"/>"/>
     <input type="submit" value="send">

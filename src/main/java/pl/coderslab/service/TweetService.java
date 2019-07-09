@@ -17,12 +17,11 @@ public class TweetService {
         this.userRepository = userRepository;
     }
 
-    public void saveTweet(Tweet tweet){
+    public void saveTweet(Tweet tweet) {
         User user = userRepository.findOne(tweet.getUser().getId());
         tweet.setUser(user);
         tweetRepository.save(tweet);
     }
-
 
 
 }

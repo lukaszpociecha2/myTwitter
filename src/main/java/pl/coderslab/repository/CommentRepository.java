@@ -8,6 +8,6 @@ import pl.coderslab.entity.Comment;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-
+    void deleteAllByUserId(Long id);
 
 }

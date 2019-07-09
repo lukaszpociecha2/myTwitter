@@ -21,12 +21,12 @@ public class Tweet {
     @ManyToOne
     private User user;
 
-    @Length(max = 140)
+    @Length(min = 1, max = 140)
     private String text;
 
     private LocalDateTime created;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tweet")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tweet", cascade = CascadeType.REMOVE)
     private List<Comment> commentList = new ArrayList<>();
 
     public Long getId() {

@@ -15,9 +15,12 @@
     <link href="<c:url value="/resources/style.css"/>" rel="stylesheet" type="text/css">
 </head>
 <body>
+<header>
+    <%@include file="header.html"%>
+</header>
 <c:out value="Witaj ${sessionScope.sessionuser.firstName}"/>
 <p>
-    <button><a href="/logout">Logout</a></button>
+    <button><a href="/signin/logout">Logout</a></button>
 </p>
 
 <f:form method="post" modelAttribute="tweet">
@@ -35,13 +38,13 @@
     <c:forEach items="${alltweets}" var="wall_tweet">
         <table id="wall">
             <tr>
-                <td><a href="<c:out value="/send/${wall_tweet.user.id}"/>" data-recepient="<c:out value="${tweet.user.id}"/>"class="message_btn"> <c:out value="${wall_tweet.user.firstName}"></c:out></a></td>
+                <td><a href="<c:out value="/messages/send/${wall_tweet.user.id}"/>" data-recepient="<c:out value="${tweet.user.id}"/>" class="message_btn"> <c:out value="${wall_tweet.user.firstName}"></c:out></a></td>
 
                 <td style="font-style: italic"><c:out value="${wall_tweet.text}"></c:out></td>
                 <td style="font-size: 12px"><c:out value="${wall_tweet.created}"></c:out></td>
             </tr>
         </table>
-        <c:forEach items="${tweet.commentList}" var="comment">
+        <c:forEach items="${wall_tweet.commentList}" var="comment">
             <span style="font-size: 11px"><p><c:out value="${comment.user.firstName}"/></span>
             <span style="font-style: italic"><c:out value="${comment.text}"></c:out></span>
             <span style="font-size: 10px"><c:out value="${comment.created}"></c:out></span>
@@ -50,7 +53,7 @@
 
         <form method="post" action="/add-comment">
             <input class="tweet_text" textarea <%--maxlength="60"--%> name="text"/>
-            <input type="hidden" name="id" value="${tweet.id}"/>
+            <input type="hidden" name="id" value="${wall_tweet.id}"/>
             <input type="hidden" name="user" value="${sessionScope.sessionuser.id}"/>
             <input type="submit" value="Comment now"/>
         </form>

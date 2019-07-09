@@ -24,11 +24,13 @@
         <p>
             <c:if test="${notunique==true}">email already exists</c:if>
         </p>
-        Enter password: <f:password path="password"></f:password><f:errors path="password"/>
+        Enter password: <f:password id="password" path="password"></f:password><f:errors path="password"/>
         <p></p>
+        Repeat password <input id="repeat_password" type="password">
         <f:hidden path="id" value="${sessionScope.sessionuser.id}"/>
-        <input type="submit" value="Log in">
+        <input type="submit" value="Submit changes" id="submit_btn">
     </f:form>
 </div>
+<script type="application/javascript" src="../../resources/create_user.js"></script>
 </body>
 </html>

@@ -7,6 +7,8 @@ import pl.coderslab.entity.User;
 import pl.coderslab.repository.MessageRepository;
 import pl.coderslab.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 public class MessageService {
 
@@ -19,7 +21,11 @@ public class MessageService {
         this.userRepository = userRepository;
     }
 
-    public void saveMessage(String text, Long authorId, Long recepientId){
+    public List<Message> getAllMessages(Long id) {
+        return messageRepository.findAllByRecepientIdOrderByIdDesc(id);
+    }
+
+    public void saveMessage(String text, Long authorId, Long recepientId) {
         Message message = new Message();
         User author = userRepository.findOne(authorId);
         User recepient = userRepository.findOne(recepientId);
@@ -27,9 +33,5 @@ public class MessageService {
         message.setAuthor(author);
         message.setRecepient(recepient);
         messageRepository.save(message);
-        System.out.println("Message author: " + message.getAuthor().getEmail()
-                        + ", message recepeient: " + message.getRecepient().getEmail()
-                        + ", message text: " + message.getText());
-
     }
 }

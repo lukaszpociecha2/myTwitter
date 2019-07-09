@@ -27,7 +27,7 @@
             Enter password: <f:password id="password" path="password"></f:password><f:errors path="password"/>
             <p></p>
             Repeat password <input id="repeat_password" type="password">
-            <input type="submit" value="Log in" id="submit_btn">
+            <input type="submit" value="Sign up" id="submit_btn">
         </f:form>
     </div>
 

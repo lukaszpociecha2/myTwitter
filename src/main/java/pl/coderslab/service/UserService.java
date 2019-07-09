@@ -42,13 +42,13 @@ public class UserService {
     }
 
     private boolean isEmailUnique(String email) {
-        boolean isUnique = !userRepository.findUserByEmail(email).isPresent();
-        System.out.println(isUnique);
-        return isUnique;
+        return !userRepository.findUserByEmail(email).isPresent();
+
     }
+
     @Transactional
     public boolean editUser(User user) {
-        if(isEmailUnique(user.getEmail()) || user.getId().equals(userRepository.findUserByEmail(user.getEmail()).get().getId())){
+        if (isEmailUnique(user.getEmail()) || user.getId().equals(userRepository.findUserByEmail(user.getEmail()).get().getId())) {
             String password = passwordEncoder.encode(user.getPassword());
             user.setPassword(password);
             User oldUser = userRepository.getOne(user.getId());
@@ -56,8 +56,6 @@ public class UserService {
             oldUser.setFirstName(user.getFirstName());
             oldUser.setLastName(user.getLastName());
             oldUser.setEmail(user.getEmail());
-
-            //userRepository.save(user);
             return true;
         } else {
             return false;

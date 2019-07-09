@@ -15,76 +15,54 @@ import javax.validation.Valid;
 import java.util.Enumeration;
 
 @Controller
-public class LoginController {
+@RequestMapping("/signin")
+public class SignInController {
 
 
     private UserRepository userRepository;
     private UserService userService;
 
     @Autowired
-    public LoginController(UserRepository userRepository, UserService userService) {
+    public SignInController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
         this.userService = userService;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public String login(HttpServletRequest request) {
-        System.err.println("W get /");
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
-            return "home";
+            return "sign-in";
         } else {
-
             return "redirect:/main-page";
         }
-
     }
 
-    @PostMapping("/")
-    public String loginProcessing(@RequestParam String email, @RequestParam String password, Model model
-            , HttpServletRequest request) {
+    @PostMapping("")
+    public String loginProcessing(@RequestParam String email, @RequestParam String password, Model model,
+                                  HttpServletRequest request) {
 
         if (password.isEmpty() || email.isEmpty()) {
             model.addAttribute("error", "true");
-            return "home";
+            return "sign-in";
         }
 
         User user = userService.verify(email, password);
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("sessionuser", user);
-            return "redirect:/main-page";
+            return "redirect:/";
         } else {
 
             model.addAttribute("error", "true");
-            return "home";
+            return "sign-in";
         }
     }
 
-    @GetMapping("/create")
-    public String signup(Model model) {
-        User user = new User();
-        model.addAttribute(user);
-        return "signup";
-    }
 
-    @PostMapping("/create")
-    public String signupProceessing(@Valid User user, BindingResult bindingResult, Model model) {
-        if (!bindingResult.hasErrors()) {
-            boolean success = userService.saveUser(user);
-            if (success) {
-                return "redirect:/";
-            } else {
-                model.addAttribute("notunique", true);
-                return "signup";
-            }
-        } else {
-            return "signup";
-        }
-    }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
@@ -92,6 +70,5 @@ public class LoginController {
         session.invalidate();
         return "redirect:/";
     }
-
 
 }
